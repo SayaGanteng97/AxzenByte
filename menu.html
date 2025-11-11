@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AxzenByte - Menu</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #0f0f0f 100%);
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 20px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(220, 38, 38, 0.2);
+            box-shadow: 0 5px 30px rgba(220, 38, 38, 0.2);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            filter: drop-shadow(0 0 10px rgba(220, 38, 38, 0.6));
+            transition: all 0.3s ease;
+        }
+
+        .logo-icon:hover {
+            filter: drop-shadow(0 0 20px rgba(220, 38, 38, 0.9));
+            transform: scale(1.05);
+        }
+
+        .logo-text {
+            font-size: 28px;
+            font-weight: 700;
+            color: #dc2626;
+            letter-spacing: 1px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 40px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 500;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #dc2626;
+            transition: width 0.3s ease;
+            box-shadow: 0 0 10px rgba(220, 38, 38, 0.8);
+        }
+
+        .nav-links a:hover {
+            color: #dc2626;
+        }
+
+        .nav-links a:hover::after,
+        .nav-links a.active::after {
+            width: 100%;
+        }
+
+        .nav-links a.active {
+            color: #dc2626;
+        }
+
+        .menu-hero {
+            padding: 150px 50px 80px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .menu-hero::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(220, 38, 38, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 0.5;
+            }
+            50% {
+                transform: translate(-50%, -50%) scale(1.1);
+                opacity: 0.8;
+            }
+        }
+
+        .menu-title {
+            font-size: 64px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ffffff 0%, #dc2626 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .menu-subtitle {
+            font-size: 20px;
+            color: #cccccc;
+            position: relative;
+            z-index: 1;
+        }
+
+        .filter-container {
+            padding: 40px 50px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 12px 30px;
+            font-size: 16px;
+            font-weight: 600;
+            border: 2px solid rgba(220, 38, 38, 0.3);
+            background: rgba(26, 26, 26, 0.6);
+            color: #ffffff;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .filter-btn:hover {
+            border-color: #dc2626;
+            background: rgba(220, 38, 38, 0.1);
+            box-shadow: 0 0 20px rgba(220, 38, 38, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .filter-btn.active {
+            background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+            border-color: #dc2626;
+            box-shadow: 0 5px 25px rgba(220, 38, 38, 0.5);
+        }
+
+        .menu-grid {
+            padding: 40px 50px 100px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .menu-item {
+            background: rgba(26, 26, 26, 0.6);
+            border: 1px solid rgba(220, 38, 38, 0.2);
+            border-radius: 25px;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            backdrop-filter: blur(10px);
+            cursor: pointer;
+            opacity: 0;
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .menu-item:hover {
+            transform: translateY(-15px);
+            border-color: rgba(220, 38, 38, 0.6);
+            box-shadow: 0 20px 60px rgba(220, 38, 38, 0.4);
+        }
+
+        .item-image-container {
+            height: 250px;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(220, 38, 38, 0.1) 0%, rgba(26, 26, 26, 0.8) 100%);
+        }
+
+        .item-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .menu-item:hover .item-image {
+            transform: scale(1.15);
+        }
+
+        .item-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 8px 20px;
+            background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+            color: white;
+            font-size: 12px;
+            font-weight: 700;
+            border-radius: 50px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 5px 15px rgba(220, 38, 38, 0.5);
+        }
+
+        .item-content {
+            padding: 30px;
+        }
+
+        .item-category {
+            font-size: 14px;
+            color: #dc2626;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+        }
+
+        .item-name {
+            font-size: 28px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 15px;
+        }
+
+        .item-description {
+            font-size: 15px;
+            color: #cccccc;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .item-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .item-price {
+            font-size: 32px;
+            font-weight: 800;
+            color: #dc2626;
+            text-shadow: 0 0 15px rgba(220, 38, 38, 0.5);
+        }
+
+        .order-btn {
+            padding: 12px 28px;
+            background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(220, 38, 38, 0.3);
+        }
+
+        .order-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(220, 38, 38, 0.6);
+        }
+
+        .menu-item.hidden {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 15px 20px;
+            }
+
+            .nav-links {
+                gap: 15px;
+                font-size: 14px;
+            }
+
+            .menu-hero {
+                padding: 120px 20px 60px;
+            }
+
+            .menu-title {
+                font-size: 42px;
+            }
+
+            .filter-container {
+                padding: 30px 20px;
+                gap: 10px;
+            }
+
+            .filter-btn {
+                padding: 10px 20px;
+                font-size: 14px;
+            }
+
+            .menu-grid {
+                padding: 30px 20px 80px;
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="index.html" class="logo">
+            <svg class="logo-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <path d="M35 25 Q40 15, 50 15 Q60 15, 65 25" fill="none" stroke="#dc2626" stroke-width="8" stroke-linecap="round"/>
+                <circle cx="40" cy="25" r="5" fill="#dc2626"/>
+                <path d="M25 45 Q30 35, 50 35 Q70 35, 75 45" fill="none" stroke="#dc2626" stroke-width="8" stroke-linecap="round"/>
+                <path d="M20 55 L80 55" stroke="#dc2626" stroke-width="8" stroke-linecap="round"/>
+                <path d="M25 75 Q30 85, 50 85 Q70 85, 75 75" fill="none" stroke="#dc2626" stroke-width="8" stroke-linecap="round"/>
+            </svg>
+            <span class="logo-text">AxzenByte</span>
+        </a>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="#" class="active">Menu</a></li>
+            <li><a href="index.html#about">About</a></li>
+            <li><a href="index.html#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <section class="menu-hero">
+        <h1 class="menu-title">Our Menu</h1>
+        <p class="menu-subtitle">Crafted with passion, served with pride</p>
+    </section>
+
+    <div class="filter-container">
+        <button class="filter-btn active" data-filter="all">All Items</button>
+        <button class="filter-btn" data-filter="popular">Popular Now</button>
+        <button class="filter-btn" data-filter="cheapest">Cheapest</button>
+        <button class="filter-btn" data-filter="ice-cream">Ice Cream</button>
+        <button class="filter-btn" data-filter="burrito">Burrito</button>
+    </div>
+
+    <div class="menu-grid" id="menuGrid">
+        <!-- Ice Cream Items -->
+        <div class="menu-item" data-category="ice-cream" data-price="5.99" data-popular="true">
+            <div class="item-image-container">
+                <svg class="item-image" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="coneGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" style="stop-color:#d4a574;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#8b6f47;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <!-- Cone -->
+                    <path d="M70 120 L100 200 L130 120 Z" fill="url(#coneGrad)" stroke="#6b5133" stroke-width="2"/>
+                    <path d="M75 130 L100 190" stroke="#8b6f47" stroke-width="1" opacity="0.5"/>
+                    <path d="M125 130 L100 190" stroke="#8b6f47" stroke-width="1" opacity="0.5"/>
+                    <!-- Ice cream scoops -->
+                    <circle cx="100" cy="110" r="35" fill="#fef3c7"/>
+                    <circle cx="85" cy="85" r="32" fill="#fde68a"/>
+                    <circle cx="115" cy="85" r="32" fill="#fbbf24"/>
+                    <circle cx="100" cy="60" r="30" fill="#f59e0b"/>
+                    <!-- Highlights -->
+                    <ellipse cx="95" cy="55" rx="8" ry="12" fill="#fef3c7" opacity="0.6"/>
+                    <ellipse cx="110" cy="75" rx="6" ry="10" fill="#fef3c7" opacity="0.5"/>
+                </svg>
+                <span class="item-badge">Popular</span>
+            </div>
+            <div class="item-content">
+                <div class="item-category">Ice Cream</div>
+                <h3 class="item-name">Classic Vanilla Supreme</h3>
+                <p class="item-description">Rich, creamy vanilla ice cream made with real Madagascar vanilla beans. A timeless favorite.</p>
+                <div class="item-footer">
+                    <span class="item-price">$5.99</span>
+                    <button class="order-btn">Add to Cart</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="menu-item" data-category="ice-cream" data-price="6.49" data-popular="true">
+            <div class="item-image-container">
+                <svg class="item-image" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="coneGrad2" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" style="stop-color:#d4a574;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#8b6f47;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <path d="M70 120 L100 200 L130 120 Z" fill="url(#coneGrad2)" stroke="#6b5133" stroke-width="2"/>
+                    <circle cx="100" cy="110" r="35" fill="#7c2d12"/>
+                    <circle cx="85" cy="85" r="32" fill="#92400e"/>
+                    <circle cx="115" cy="85" r="32" fill="#78350f"/>
+                    <circle cx="100" cy="60" r="30" fill="#451a03"/>
+                    <ellipse cx="95" cy="55" rx="8" ry="12" fill="#fef3c7" opacity="0.4"/>
+                </svg>
+                <span class="item-badge">Popular</span>
+            </div>
+            <div class="item-content">
+                <div class="item-category">Ice Cream</div>
+                <h3 class="item-name">Double Chocolate Delight</h3>
+                <p class="item-description">Decadent dark chocolate ice cream with chocolate chunks. Pure chocolate heaven in every bite.</p>
+                <div class="item-footer">
+                    <span class="item-price">$6.49</span>
+                    <button class="order-btn">Add to Cart</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="menu-item" data-category="ice-cream" data-price="4.99">
+            <div class="item-image-container">
+                <svg class="item-image" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="coneGrad3" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" style="stop-color:#d4a574;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#8b6f47;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <path d="M70 120 L100 200 L130 120 Z" fill="url(#coneGrad3)" stroke="#6b5133" stroke-width="2"/>
+                    <circle cx="100" cy="110" r="35" fill="#fbcfe8"/>
+                    <circle cx="85" cy="85" r="32" fill="#f9a8d4"/>
+                    <circle cx="115" cy="85" r="32" fill="#f472b6"/>
+                    <circle cx="100" cy="60" r="30" fill="#ec4899"/>
+                    <ellipse cx="95" cy="55" rx="8" ry="12" fill="#fef3c7" opacity="0.6"/>
+                </svg>
+            </div>
+            <div class="item-content">
+                <div class="item-category">Ice Cream</div>
+                <h3 class="item-name">Strawberry Bliss</h3>
+                <p class="item-description">Fresh strawberry ice cream with real fruit pieces. Light, refreshing, and naturally sweet.</p>
+                <div class="item-footer">
+                    <span class="item-price">$4.99</span>
+                    <button class="order-btn">Add to Cart</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Burrito Items -->
+        <div class="menu-item" data-category="burrito" data-price="8.99" data-popular="true">
+            <div class="item-image-container">
+                <svg class="item-image" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                    <ellipse cx="100" cy="100" rx="80" ry="45" fill="#f5deb3" stroke="#d2b48c" stroke-width="2"/>
+                    <ellipse cx="100" cy="100" rx="70" ry="38" fill="#8b4513" opacity="0.3"/>
+                    <rect x="30" y="85" width="140" height="10" fill="#dc2626" opacity="0.7" rx="2"/>
+                    <rect x="35" y="100" width="130" height="8" fill="#fbbf24" opacity="0.6" rx="2"/>
+                    <rect x="40" y="112" width="120" height="6" fill="#22c55e" opacity="0.7" rx="2"/>
+                    <ellipse cx="100" cy="100" rx="75" ry="42" fill="none" stroke="#c19a6b" stroke-width="1.5" opacity="0.5"/>
+                </svg>
+                <span class="item-badge">Best Seller</span>
+            </div>
+            <div class="item-content">
+                <div class="item-category">Burrito</div>
+                <h3 class="item-name">Classic Beef Burrito</h3>
+                <p class="item-description">Seasoned beef, rice, beans, cheese, lettuce, and our signature sauce wrapped in a warm tortilla.</p>
+                <div class="item-footer">
+                    <span class="item-price">$8.99</span>
+                    <button class="order-btn">Add to Cart</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="menu-item" data-category="burrito" data-price="9.49" data-popular="true">
+            <div class="item-image-container">
+                <svg class="item-image" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                    <ellipse cx="100" cy="100" rx="80" ry="45" fill="#f5deb3" stroke="#d2b48c" stroke-width="2"/>
+                    <ellipse cx="100" cy="100" rx="70" ry="38" fill="#fbbf24" opacity="0.4"/>
+                    <rect x="30" y="85" width="140" height="10" fill="#eab308" opacity="0.7" rx="2"/>
+                    <rect x="35" y="100" width="130" height="8" fill="#fbbf24" opacity="0.6" rx="2"/>
+                    <rect x="40" y="112" width="120" height="6" fill="#22c55e" opacity="0.7" rx="2"/>
+                    <ellipse cx="100" cy="100" rx="75" ry="42" fill="none" stroke="#c19a6b" stroke-width="1.5" opacity="0.5"/>
+                </svg>
+                <span class="item-badge">Popular</span>
+            </div>
+            <div class="item-content">
+                <div class="item-category">Burrito</div>
+                <h3 class="item-name">Grilled Chicken Burrito</h3>
+                <p class="item-description">Tender grilled chicken, Mexican rice, black beans, guacamole, and pico de gallo.</p>
+                <div class="item-footer">
+                    <span class="item-price">$9.49</span>
+                    <button class="order-btn">Add to Cart</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="menu-item" data-category="burrito" data-price="7.99">
+            <div class="item-image-container">
+                <svg class="item-image" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                    <ellipse cx="100" cy="100" rx="80" ry="45" fill="#f5deb3" stroke="#d2b48c" stroke-width="2"/>
+                    <ellipse cx="100" cy="100" rx="70" ry="38" fill="#22c55e" opacity="0.3"/>
+                    <rect x="30" y="85" width="140" height="10" fill="#84cc16" opacity="0.7" rx="2"/>
+                    <rect x="35" y="100" width="130" height="8" fill="#22c55e" opacity="0.6" rx="2"/>
+                    <rect x="40" y="112" width="120" height="6" fill="#ef4444" opacity="0.7" rx="2"/>
+                    <ellipse cx="100" cy="100" rx="75" ry="42" fill="none" stroke="#c19a6b" stroke-width="1.5" opacity="0.5"/>
+                </svg>
+            </div>
+            <div class="item-content">
+                <div class="item-category">Burrito</div>
+                <h3 class="item-name">Veggie Supreme Burrito</h3>
+                <p class="item-description">Packed with grilled vegetables, cilantro rice, beans, salsa, and sour cream. 100% vegetarian.</p>
+                <div class="item-footer">
+                    <span class="item-price">$7.99</span>
+                    <button class="order-btn">Add to Cart</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const menuItems = document.querySelectorAll('.menu-item');
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const filter = btn.getAttribute('data-filter');
+                
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                menuItems.forEach(item => {
+                    item.classList.add('hidden');
+                });
+
+                setTimeout(() => {
+                    menuItems.forEach((item, index) => {
+                        const category = item.getAttribute('data-category');
+                        const price = parseFloat(item.getAttribute('data-price'));
+                        const isPopular = item.getAttribute('data-popular') === 'true';
+
+                        let shouldShow = false;
+
+                        if (filter === 'all') {
+                            shouldShow = true;
+                        } else if (filter === 'popular' && isPopular) {
+                            shouldShow = true;
+                        } else if (filter === 'cheapest' && price < 7) {
+                            shouldShow = true;
+                        } else if (filter === category) {
+                            shouldShow = true;
+                        }
+
+                        if (shouldShow) {
+                            setTimeout(() => {
+                                item.classList.remove('hidden');
+                                item.style.animation = 'none';
+                                setTimeout(() => {
+                                    item.style.animation = 'fadeInUp 0.6s ease-out forwards';
+                                }, 10);
+                            }, index * 100);
+                        }
+                    });
+                }, 300);
+            });
+        });
+
+        document.querySelectorAll('.order-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const itemName = btn.closest('.menu-item').querySelector('.item-name').textContent;
+                alert(`Added "${itemName}" to cart! 🍔`);
+            });
+        });
+    </script>
+</body>
+</html>
